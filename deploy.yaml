@@ -1,0 +1,48 @@
+---
+version: "2.0"
+services:
+  avail-node:
+    image: availj/avail:v2.2.5.0-rc1
+    expose:
+      - port: 9944
+        as: 9944
+        to:
+          - global: true
+      - port: 9933
+        as: 9933
+        to:
+          - global: true
+      - port: 30333
+        as: 30333
+        to:
+          - global: true
+    args:
+    - --chain=mainnet
+    - --name=Akash_Zealy
+    - --rpc-external
+    - --rpc-methods=unsafe
+    - --unsafe-rpc-external
+    - --rpc-cors=all
+
+
+profiles:
+  compute:
+    avail-node:
+      resources:
+        cpu:
+          units: 4
+        memory:
+          size: 4GB
+        storage:
+          - size: 20Gi
+  placement:
+    dcloud:
+      pricing:
+        avail-node:
+          denom: uakt
+          amount: 1000
+deployment:
+  avail-node:
+    dcloud:
+      profile: avail-node
+      count: 1
